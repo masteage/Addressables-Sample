@@ -47,6 +47,8 @@ public class AddObject : MonoBehaviour {
 	{
 		Addressables_Instantiate,
 		Addressables_LoadAssetAsync,
+		AssetRef_InstantiateAsync,
+		AssetRef_LoadAssetAsync,
 	}
 	public string addressToAdd;
 	public AssetReference _assetReference;
@@ -56,6 +58,7 @@ public class AddObject : MonoBehaviour {
 	private AsyncOperationHandle<GameObject> asyncOperationHandle;
 	private eAssetAPIType type = eAssetAPIType.Addressables_LoadAssetAsync;
 	private GameObject obj;
+	private GameObject objInstantiate;
 	
 	void Start()
 	{
@@ -71,6 +74,7 @@ public class AddObject : MonoBehaviour {
 		{
 			case eAssetAPIType.Addressables_Instantiate:
 			{
+				Debug.Log("Addressables.InstantiateAsync case");
 				if (m_ReadyToLoad)
 				{
 					asyncOperationHandle = Addressables.InstantiateAsync("ball", randSpot, Quaternion.identity);
@@ -88,19 +92,21 @@ public class AddObject : MonoBehaviour {
 
 			case eAssetAPIType.Addressables_LoadAssetAsync:
 			{
+				Debug.Log("Addressables_LoadAssetAsync case");
 				if (m_ReadyToLoad)
 				{
-					// asyncOperationHandle = Addressables.LoadAssetAsync<GameObject>(_assetReference);
-					// m_ReadyToLoad = false;
-					// asyncOperationHandle.
-
 					Addressables.LoadAssetAsync<GameObject>(_assetReference).Completed += handle =>
 					{
 						if (handle.Status == AsyncOperationStatus.Succeeded)
 						{
 							asyncOperationHandle = handle;
 							m_ReadyToLoad = false;
-							obj = GameObject.Instantiate(handle.Result, randSpot, Quaternion.identity);
+							obj = handle.Result;
+							objInstantiate = GameObject.Instantiate(obj, randSpot, Quaternion.identity);
+							
+							Debug.Log($"handle.Result : ${handle.Result}");
+							Debug.Log($"obj : ${obj}");
+							Debug.Log($"objInstantiate : ${objInstantiate}");
 							Debug.Log("Addressables.LoadAssetAsync Succeeded");
 						}
 					};
@@ -109,14 +115,33 @@ public class AddObject : MonoBehaviour {
 				}
 				else
 				{
+					// succeed 
 					Addressables.Release(asyncOperationHandle);
+					
+					// Addressables.LoadAssetsAsync
+					// warn, error ??
+					// Addressables.Release(obj);
+					// Addressables.Release(objInstantiate);
 					// Addressables.Release(_assetReference);
-					// Addressables.Release(asyncOperationHandle);
-					GameObject.Destroy(obj);
-					obj = null;
+					// _assetReference.ReleaseAsset();
+					
+					GameObject.Destroy(objInstantiate);
+					objInstantiate = null;
 					m_ReadyToLoad = true;
 					Debug.Log("Addressables.Release After");
 				}
+			}
+				break;
+
+			case eAssetAPIType.AssetRef_InstantiateAsync:
+			{
+				Debug.Log("AssetRef_InstantiateAsync case");
+			}
+				break;
+			
+			case eAssetAPIType.AssetRef_LoadAssetAsync:
+			{
+				Debug.Log("AssetRef_LoadAssetAsync case");
 			}
 				break;
 			
