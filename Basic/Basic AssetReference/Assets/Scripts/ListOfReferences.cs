@@ -32,6 +32,7 @@ public class ListOfReferences : MonoBehaviour {
 
 	public void SpawnAThing()
 	{
+		Debug.Log("ListOfReferences::SpawnAThing called (Instantiate)");
 		if (m_IsReady && shapes[currentIndex].Asset != null)
 		{
 			for(int count = 0; count <= currentIndex; count++)
@@ -45,8 +46,10 @@ public class ListOfReferences : MonoBehaviour {
 
 	void OnDestroy()
 	{
+		Debug.Log("ListOfReferences::OnDestroy called (ReleaseAsset)");
 		foreach (var shape in shapes)
 		{
+			// Debug.Log("shape.ReleaseAsset()");
 			shape.ReleaseAsset();
 		}
 	}

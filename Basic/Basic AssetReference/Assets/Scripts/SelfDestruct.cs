@@ -7,12 +7,22 @@ public class SelfDestruct : MonoBehaviour {
 
 	void Start()
 	{
+		Debug.Log("SelfDestruct::Start called");
 		Invoke("Release", lifetime);
+		Debug.Log("SelfDestruct::Start end");
 	}
 
 	void Release()
 	{
-        if (!Addressables.ReleaseInstance(gameObject))
-            Destroy(gameObject);
+		Debug.Log("SelfDestruct::Release called");
+		if (!Addressables.ReleaseInstance(gameObject))
+		{
+			Debug.Log("Addressables.ReleaseInstance fail (Destroy call)");
+			Destroy(gameObject);
+		}
+		else
+		{
+			Debug.Log("Addressables.ReleaseInstance success");
+		}
 	}
 }

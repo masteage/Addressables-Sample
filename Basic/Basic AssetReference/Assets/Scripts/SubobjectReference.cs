@@ -19,12 +19,14 @@ public class SubobjectReference : MonoBehaviour
 
     public void LoadMainAsset()
     {
+        Debug.Log("SubobjectReference::LoadMainAsset called (LoadAssetAsync)");
         loadMainButton.interactable = false;
         sheetReference.LoadAssetAsync<IList<Sprite>>().Completed += AssetDone;
     }
 
     public void LoadSubAsset()
     {
+        Debug.Log("SubobjectReference::LoadSubAsset called (LoadAssetAsync)");
         loadSubButton.interactable = false;
         sheetSubReference.LoadAssetAsync<Sprite>().Completed += Subassetdone;
     }
@@ -57,6 +59,7 @@ public class SubobjectReference : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("SubobjectReference::Start called (Addressables.InitializeAsync)");
         Addressables.InitializeAsync();
     }
 

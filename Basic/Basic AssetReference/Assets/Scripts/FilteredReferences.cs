@@ -27,6 +27,7 @@ public class FilteredReferences : MonoBehaviour
     
     void Start()
     {
+        Debug.Log("FilteredReferences::Start called (LoadAssetAsync)");
         leftObject.LoadAssetAsync();
         rightObject.LoadAssetAsync();
         spawnMaterial.LoadAssetAsync();
@@ -85,6 +86,7 @@ public class FilteredReferences : MonoBehaviour
 
     void OnDisable()
     {
+        Debug.Log("FilteredReferences::OnDisable called (ReleaseAsset)");
         //note that this may be dangerous, as we are releasing the asset without knowing if the instances still exist.
         // sometimes that's fine, sometimes not.
         leftObject.ReleaseAsset();
